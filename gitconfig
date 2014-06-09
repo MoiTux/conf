@@ -1,13 +1,13 @@
 [user]
-	name = MoiTux
-	email = moitux
+    name = MoiTux
+    email = moitux
 
 [core]
-	editor = emacs
-	excludesfile = /home/sylvain/.gitignore
+    editor = emacs -nw
+    excludesfile = /home/sylvain/.gitignore
 
 [color]
-	ui = true
+    ui = true
     branch = auto
     diff = auto
     interactive = auto
