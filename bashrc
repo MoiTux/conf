@@ -26,10 +26,12 @@ export EDITOR=emacs
 set -o emacs
 
 # Some default option for less
-#  no beep (-Q)
-#  display colours (-R)
-#  don't wrap lines, horizontal scrolling (-S)
-export LESS="-QRS"
+#  -F: quit if one screen
+#  -X: Disables sending the termcap init/deinit strings to the terminal
+#  -Q: "quiet" operation: the terminal bell is never rung
+#  -R: display colours (RAW CONTROL CHARS)
+#  -S: don't wrap lines, horizontal scrolling
+export LESS="-FXQRS"
 
 # save all lines of a multiple-line command in the same history entry
 shopt -s cmdhist
