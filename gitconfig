@@ -1,0 +1,28 @@
+[user]
+	name = MoiTux
+	email = moitux
+
+[core]
+	editor = emacs
+	excludesfile = /home/sylvain/.gitignore
+
+[color]
+	ui = true
+    branch = auto
+    diff = auto
+    interactive = auto
+    status = auto
+    grep = auto
+
+[alias]
+    st = status --short --branch
+    glog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    review = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -p
+    plog = log --pretty=format:'%C(yellow)%h%Creset%d - %C(green)<%an>%Creset %C(bold blue)(%cr)%Creset - %s'
+
+[push]
+     default = current
+
+[branch]
+     # setup rebase for every tracking branch
+     autosetuprebase = always
