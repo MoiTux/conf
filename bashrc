@@ -84,6 +84,9 @@ alias cd..='cd ..'
 alias cd.='cd ..'
 alias cd-='cd -'
 
+# allow alias replacement after sudo command
+alias sudo='sudo '
+
 # create directory and go to that directory
 # -p: create the parent directory if needed
 md () { mkdir -p "$1" && cd "$1"; }
