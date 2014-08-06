@@ -68,7 +68,7 @@ if [ "$color" = yes ] && [ -x /usr/bin/dircolors ]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-    alias egrep='rgrep --color=auto'
+    alias rgrep='rgrep --color=auto'
 fi
 
 # ls
