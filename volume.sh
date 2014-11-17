@@ -1,7 +1,5 @@
 #!/bin/sh
-"
-use PulseAudio to easly set the volume up/down/mute
-"
+# use PulseAudio to easly set the volume up/down/mute
 
 if [ $# -ne 1 ];
 then
