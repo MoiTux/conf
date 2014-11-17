@@ -6,13 +6,13 @@ export XAUTHORITY="${HOME}/.Xauthority"
 
 state=$(cat /proc/acpi/button/lid/LID/state | tr -d ' ' | cut -d : -f 2)
 if [ "$state" = "closed" ]; then
-    xrandr --output eDP1 --off >> ~/acpi.log
+    xrandr --output eDP1 --off
 else
     regexp='connected [0-9]{1,4}x[0-9]{1,4}\+0\+0'
     first_screen=$(xrandr | grep -E "${regexp}" | cut -d ' ' -f 1)
     if [ -z "${first_screen}" ]; then
-	xrandr --output eDP1 --preferred
+        xrandr --output eDP1 --preferred
     else
-	xrandr --output eDP1 --preferred --left-of "${first_screen}"
+        xrandr --output eDP1 --preferred --left-of "${first_screen}"
     fi
 fi
