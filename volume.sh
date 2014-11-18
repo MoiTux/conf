@@ -7,8 +7,10 @@ then
     echo 'Usage: mute|-x[%|dB]|+x[%|dB]'
     exit 0
 fi
+
 device=$(pactl info | grep 'Default Sink' | cut -f 3 -d ' ')
-if [ "$1" = "mute" ];
+
+if [ "$1" = 'mute' ];
 then
     pactl set-sink-mute "${device}" toggle
 else
