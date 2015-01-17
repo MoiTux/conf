@@ -6,7 +6,11 @@ export XAUTHORITY="${HOME}/.Xauthority"
 
 state=$(cat /proc/acpi/button/lid/LID/state | tr -d ' ' | cut -d : -f 2)
 if [ "$state" = "closed" ]; then
-    xrandr --output eDP1 --off
+    # XXX keep always one screen to avoid killing the current session
+    if [ "$(xrandr | grep \* | wc -l)" -gt 1 ];
+    then
+       xrandr --output eDP1 --off
+    fi
 else
     regexp='connected [0-9]{1,4}x[0-9]{1,4}\+0\+0'
     first_screen=$(xrandr | grep -E "${regexp}" | cut -d ' ' -f 1)
