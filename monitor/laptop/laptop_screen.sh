@@ -1,5 +1,8 @@
 #!/bin/sh
 # enable/disable the laptop screen on close/open of the laptop
+# screen are considered in one line
+# the laptop screen will always be set to the most left part of that line
+
 
 export DISPLAY=':0.0'
 export XAUTHORITY="${HOME}/.Xauthority"

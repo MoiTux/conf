@@ -1,5 +1,7 @@
 #!/bin/sh
-# enable/disable the laptop screen
+# auto config new screen
+# screen are considered in one line
+# a new screen will be added to the right of the previous screen
 
 export DISPLAY=':0.0'
 export XAUTHORITY='/home/sylvain/.Xauthority'
