@@ -1,2 +1,2 @@
 event=button/lid
-action=su sylvain /etc/acpi/laptop_screen.sh
+action=/etc/acpi/laptop_screen.sh

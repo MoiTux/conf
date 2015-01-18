@@ -3,8 +3,22 @@
 # screen are considered in one line
 # a new screen will be added to the right of the previous screen
 
-export DISPLAY=':0.0'
-export XAUTHORITY='/home/sylvain/.Xauthority'
+
+if [ -n "$DISPLAY" -a ! -f /tmp/.display ];
+then
+    echo "$DISPLAY" > /tmp/.display
+else
+    DISPLAY=$(cat /tmp/.display)
+    export DISPLAY
+fi
+
+if [ -n "$XAUTHORITY" -a ! -f /tmp/.xauthority ];
+then
+    echo "$XAUTHORITY" > /tmp/.xauthority
+else
+    XAUTHORITY=$(cat /tmp/.xauthority)
+    export XAUTHORITY
+fi
 
 cmd=''
 

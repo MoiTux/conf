@@ -3,9 +3,21 @@
 # screen are considered in one line
 # the laptop screen will always be set to the most left part of that line
 
+if [ -n "$DISPLAY" -a ! -f /tmp/.display ];
+then
+    echo "$DISPLAY" > /tmp/.display
+else
+    DISPLAY=$(cat /tmp/.display)
+    export DISPLAY
+fi
 
-export DISPLAY=':0.0'
-export XAUTHORITY="${HOME}/.Xauthority"
+if [ -n "$XAUTHORITY" -a ! -f /tmp/.xauthority ];
+then
+    echo "$XAUTHORITY" > /tmp/.xauthority
+else
+    XAUTHORITY=$(cat /tmp/.xauthority)
+    export XAUTHORITY
+fi
 
 state=$(cat /proc/acpi/button/lid/LID/state | tr -d ' ' | cut -d : -f 2)
 if [ "$state" = "closed" ]; then
