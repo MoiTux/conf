@@ -35,9 +35,6 @@ do
     fi
 done
 
-last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
-last=$(xrandr | grep "+${last}+" | cut -d ' ' -f 1)
-
 connected=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
 
 if [ -n "$connected" ];
@@ -49,10 +46,20 @@ then
     fi
 fi
 
-for output in $connected
+last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
+last=$(xrandr | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
+
+clones=$(xrandr | grep '+[0-9]*+[0-9]*' |
+                awk -F '(x[0-9]*)| ' '{print $4}' | sort | uniq -d)
+if [ -n "$clones" ];
+then
+    clones=$(xrandr | grep "$clones" | cut -d ' ' -f 1)
+fi
+
+for output in $clones $connected
 do
     cmd="${cmd} --output ${output} --preferred"
-    if [ -n "${last}" ]; then
+    if [ -n "${last}" -a "$last" != "$output" ]; then
         cmd="${cmd} --right-of ${last}"
     fi
     last=$output
