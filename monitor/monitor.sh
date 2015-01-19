@@ -44,7 +44,7 @@ then
     clones=$(xrandr | grep "$clones" | cut -d ' ' -f 1)
 fi
 
-no_laptop=false
+no_laptop='false'
 if [ -n "$connected" -o -n "$clones" ];
 then
     # XXX a new screen has been connected or clones has been detected
@@ -52,12 +52,12 @@ then
     state=$(cat /proc/acpi/button/lid/LID/state | tr -d ' ' | cut -d : -f 2)
     if [ "$state" = "closed" ]; then
         cmd="${cmd} --output eDP1 --off"
-        no_laptop=true
+        no_laptop='true'
     fi
 fi
 
 last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
-if [ no_laptop ];
+if [ "${no_laptop}" = 'true' ];
 then
     last=$(xrandr | grep -v eDP1)
 else
@@ -67,7 +67,7 @@ last=$(echo "$last" | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
 
 for output in $clones $connected
 do
-    if [ no_laptop -a "${output}" = 'eDP1' ];
+    if [ "${no_laptop}" = 'true' -a "${output}" = 'eDP1' ];
     then
         continue
     fi
@@ -79,5 +79,6 @@ do
 done
 
 if [ -n "$cmd" ]; then
+    echo "$cmd" > /tmp/cmd
     xrandr $cmd
 fi
