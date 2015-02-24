@@ -4,7 +4,7 @@
 # a new screen will be added to the right of the previous screen
 
 
-if [ -n "$DISPLAY" -a ! -f /tmp/.display ];
+if [ -n "$DISPLAY" -a ! -f /tmp/.display ]
 then
     echo "$DISPLAY" > /tmp/.display
 else
@@ -12,7 +12,7 @@ else
     export DISPLAY
 fi
 
-if [ -n "$XAUTHORITY" -a ! -f /tmp/.xauthority ];
+if [ -n "$XAUTHORITY" -a ! -f /tmp/.xauthority ]
 then
     echo "$XAUTHORITY" > /tmp/.xauthority
 else
@@ -26,7 +26,7 @@ disconnected=$(xrandr | grep 'disconnected [0-9]' | cut -d ' ' -f 1)
 for output in $disconnected
 do
     # XXX keep always one screen to avoid killing the current session
-    if [ "$(xrandr | grep \* | wc -l)" -gt 1 ];
+    if [ "$(xrandr | grep \* | wc -l)" -gt 1 ]
     then
         cmd="${cmd} --output ${output} --off"
     else
@@ -39,25 +39,26 @@ connected=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
 
 clones=$(xrandr | grep '+[0-9]*+[0-9]*' |
                 awk -F '(x[0-9]*)| ' '{print $4}' | sort | uniq -d)
-if [ -n "$clones" ];
+if [ -n "$clones" ]
 then
     clones=$(xrandr | grep "$clones" | cut -d ' ' -f 1)
 fi
 
 no_laptop='false'
-if [ -n "$connected" -o -n "$clones" ];
+if [ -n "$connected" -o -n "$clones" ]
 then
     # XXX a new screen has been connected or clones has been detected
     #     so there is more that one screen no need to keep the laptop screen
     state=$(cat /proc/acpi/button/lid/LID/state | tr -d ' ' | cut -d : -f 2)
-    if [ "$state" = "closed" ]; then
+    if [ "$state" = "closed" ]
+    then
         cmd="${cmd} --output eDP1 --off"
         no_laptop='true'
     fi
 fi
 
 last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
-if [ "${no_laptop}" = 'true' ];
+if [ "${no_laptop}" = 'true' ]
 then
     last=$(xrandr | grep -v eDP1)
 else
@@ -67,18 +68,20 @@ last=$(echo "$last" | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
 
 for output in $clones $connected
 do
-    if [ "${no_laptop}" = 'true' -a "${output}" = 'eDP1' ];
+    if [ "${no_laptop}" = 'true' -a "${output}" = 'eDP1' ]
     then
         continue
     fi
     cmd="${cmd} --output ${output} --preferred"
-    if [ -n "${last}" -a "$last" != "$output" ]; then
+    if [ -n "${last}" -a "$last" != "$output" ]
+    then
         cmd="${cmd} --right-of ${last}"
     fi
     last=$output
 done
 
-if [ -n "$cmd" ]; then
+if [ -n "$cmd" ]
+then
     echo "$cmd" > /tmp/cmd
     xrandr $cmd
 fi
