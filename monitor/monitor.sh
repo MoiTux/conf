@@ -20,6 +20,12 @@ else
     export XAUTHORITY
 fi
 
+# XXX override xrandr command to only call it once
+_xrandr=$(xrandr)
+xrandr() {
+    echo "$_xrandr"
+}
+
 cmd=''
 
 disconnected=$(xrandr | grep 'disconnected [0-9]' | cut -d ' ' -f 1)
@@ -83,5 +89,6 @@ done
 if [ -n "$cmd" ]
 then
     echo "$cmd" > /tmp/cmd
-    xrandr $cmd
+    # XXX xrandr has been overridden so explicit call the xrandr command
+    command xrandr $cmd
 fi
