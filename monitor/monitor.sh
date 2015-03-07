@@ -27,17 +27,22 @@ xrandr() {
 
 cmd=''
 
+nb_connected=$(xrandr | grep -c ' connected ')
+nb_disconnected=$(xrandr | grep -c 'disconnected [0-9]')
+nb_diff=$(($nb_connected - $nb_disconnected))
+
 disconnected=$(xrandr | grep 'disconnected [0-9]' | cut -d ' ' -f 1)
 for output in $disconnected
 do
     # XXX keep always one screen to avoid killing the current session
-    if [ "$(xrandr | grep \* | wc -l)" -gt 1 ]
+    if [ "${nb_diff}" -eq 1 -a "${nb_disconnected}" -gt 1 ]
     then
         cmd="${cmd} --output ${output} --off"
     else
         cmd="${cmd} --output eDP1 --preferred"
         cmd="${cmd} --output ${output} --off"
     fi
+    nb_disconnected=$(($nb_disconnected - 1))
 done
 
 connected=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
