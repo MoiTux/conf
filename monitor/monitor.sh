@@ -47,12 +47,7 @@ done
 
 connected=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
 
-clones=$(xrandr | grep '+[0-9]*+[0-9]*' |
-                awk -F '(x[0-9]*)| ' '{print $4}' | sort | uniq -d)
-if [ -n "$clones" ]
-then
-    clones=$(xrandr | grep "$clones" | cut -d ' ' -f 1)
-fi
+clones=$(xrandr | awk '/(+[0-9]{1,4}){2}/{print $1}')
 
 no_laptop='false'
 if [ -n "$connected" -o -n "$clones" ]
