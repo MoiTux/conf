@@ -41,6 +41,9 @@ do
     else
         cmd="${cmd} --output eDP1 --preferred --scale 1x1"
         cmd="${cmd} --output ${output} --off"
+
+        command xrandr $cmd
+        exit 0
     fi
     nb_disconnected=$(($nb_disconnected - 1))
 done
