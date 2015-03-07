@@ -77,7 +77,7 @@ do
     then
         continue
     fi
-    cmd="${cmd} --output ${output} --preferred"
+    cmd="${cmd} --output ${output} --preferred --scale 1x1"
     if [ -n "${last}" -a "$last" != "$output" ]
     then
         cmd="${cmd} --right-of ${last}"
