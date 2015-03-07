@@ -87,7 +87,6 @@ done
 
 if [ -n "$cmd" ]
 then
-    echo "$cmd" > /tmp/cmd
     # XXX xrandr has been overridden so explicit call the xrandr command
     command xrandr $cmd
 fi
