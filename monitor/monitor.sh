@@ -39,7 +39,7 @@ do
     then
         cmd="${cmd} --output ${output} --off"
     else
-        cmd="${cmd} --output eDP1 --preferred"
+        cmd="${cmd} --output eDP1 --preferred --scale 1x1"
         cmd="${cmd} --output ${output} --off"
     fi
     nb_disconnected=$(($nb_disconnected - 1))
