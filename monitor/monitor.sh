@@ -3,7 +3,6 @@
 # screen are considered in one line
 # a new screen will be added to the right of the previous screen
 
-
 if [ -n "$DISPLAY" -a ! -f /tmp/.display ]
 then
     echo "$DISPLAY" > /tmp/.display
