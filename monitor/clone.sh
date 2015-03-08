@@ -3,10 +3,30 @@
 # the same output mode
 # this script will add the --scale option to fix this issue
 
+available=$(xrandr | awk '/ connected /{print $1}')
+
+usage() {
+  echo 'Usage: clone screen_src screen_dst'
+  echo -e "Available screen:\n${available}"
+  exit 1
+}
+
 if [ $# -ne 2 ]
 then
-  echo 'Usage: clone screen_src screen_dst'
-  exit 1
+  usage
+fi
+
+
+if [ $(echo "${available}" | grep -c "^${1}$") -ne 1 ]
+then
+  echo "${1} is not a valide screen"
+  usage
+fi
+
+if [ $(echo "${available}" | grep -c "^${2}$") -ne 1 ]
+then
+  echo "${2} is not a valide screen"
+  usage
 fi
 
 # XXX override xrandr command to only call it once
