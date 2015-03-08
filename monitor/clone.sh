@@ -20,7 +20,7 @@ get_preferred() {
   echo $(xrandr | awk "/^$1 / {
            do
              getline;
-           while (match(\$0, /+$/) == 0)
+           while (match(\$0, /[0-9]{2}\.[0-9]{2}( |\*)\+/) == 0)
            print \$1
          }")
 }
