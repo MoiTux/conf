@@ -14,7 +14,7 @@ if [ "$1" = 'mute' ];
 then
     pactl set-sink-mute "${device}" toggle
 else
-    pactl set-sink-volume "${device}" -- "$1"
+    pactl set-sink-volume "${device}" "$1"
 fi
 id=$(pactl list short sinks | grep "${device}" | cut -f 1)
 id=$(( $id + 1 ))
