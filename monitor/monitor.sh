@@ -59,9 +59,6 @@ connected=$(echo "${connected}" | grep -v eDP1 | sort -r -)
 new=$(echo "${new}" | grep -v eDP1 | sort -r -)
 order="${order} ${connected} ${new}"
 
-last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
-last=$(xrandr | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
-
 for output in $order
 do
     cmd="${cmd} --output ${output} --preferred --scale 1x1"
