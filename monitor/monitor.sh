@@ -27,15 +27,24 @@ xrandr() {
 
 cmd=''
 
-nb_connected=$(xrandr | grep -c ' connected [0-9]')
-disconnected=$(xrandr | awk '/disconnected [0-9]/{print $1}')
-if [ "${nb_connected}" -eq 0 ]
+state=$(awk '{print $2}' /proc/acpi/button/lid/LID/state)
+nb_connected_all=$(xrandr | grep -c ' connected ')
+if [ "${state}" = "closed" ]
 then
-    # XXX keep always one screen to avoid killing the current session
-    cmd="${cmd} --output eDP1 --preferred --scale 1x1"
-    disconnected="echo ${disconnected} | grep -v eDP1"
+    # the laptop's screen is closed remove it from available screen
+    _xrandr=$(echo "${_xrandr}" | grep -v eDP1)
+    if [ "${nb_connected_all}" -ge 1 ]
+    then
+        # more than one screen is available force to disable laptop's screen
+        cmd="${cmd} --output eDP1 --off"
+    else
+        # only the laptop's screen is available force it to avoid
+        # killing the X session
+        cmd="${cmd} --output eDP1 --preferred --scale 1x1"
+    fi
 fi
 
+disconnected=$(xrandr | awk '/disconnected [0-9]/{print $1}')
 for output in $disconnected
 do
     cmd="${cmd} --output ${output} --off"
@@ -44,34 +53,11 @@ done
 new=$(xrandr | awk '/ connected (/{print $1}')
 connected=$(xrandr | awk '/(+[0-9]{1,4}){2}/{print $1}')
 
-no_laptop='false'
-if [ -n "$new" -o -n "$connected" ]
-then
-    # XXX a new screen has been connected or clones has been detected
-    #     so there is more that one screen no need to keep the laptop screen
-    state=$(awk '{print $2}' /proc/acpi/button/lid/LID/state)
-    if [ "$state" = "closed" ]
-    then
-        cmd="${cmd} --output eDP1 --off"
-        no_laptop='true'
-    fi
-fi
-
 last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
-if [ "${no_laptop}" = 'true' ]
-then
-    xrandr_tmp=$(xrandr | grep -v eDP1)
-else
-    xrandr_tmp=$(xrandr)
-fi
-last=$(echo "$xrandr_tmp" | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
+last=$(xrandr | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
 
 for output in $connected $new
 do
-    if [ "${no_laptop}" = 'true' -a "${output}" = 'eDP1' ]
-    then
-        continue
-    fi
     cmd="${cmd} --output ${output} --preferred --scale 1x1"
     if [ -n "${last}" -a "$last" != "$output" ]
     then
