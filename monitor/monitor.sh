@@ -29,11 +29,11 @@ xrandr() {
 cmd=''
 
 state=$(awk '{print $2}' /proc/acpi/button/lid/LID/state)
-nb_connected_all=$(xrandr | grep -c ' connected ')
 if [ "${state}" = "closed" ]
 then
     # the laptop's screen is closed remove it from available screen
     _xrandr=$(echo "${_xrandr}" | grep -v eDP1)
+    nb_connected_all=$(xrandr | grep -c ' connected ')
     if [ "${nb_connected_all}" -ge 1 ]
     then
         # more than one screen is available force to disable laptop's screen
