@@ -54,9 +54,10 @@ done
 new=$(xrandr | awk '/ connected \(/{print $1}')
 connected=$(xrandr | awk '/ connected [0-9]/{print $1}')
 
-order=$(echo "${new}" "${connected}" | grep eDP1)
-order="${order} $(echo ${connected} | grep -v eDP1 | sort -r -)"
-order="${order} $(echo ${new} | grep -v eDP1 | sort -r -)"
+order=$(echo "${new}\n${connected}" | grep eDP1)
+connected=$(echo "${connected}" | grep -v eDP1 | sort -r -)
+new=$(echo "${new}" | grep -v eDP1 | sort -r -)
+order="${order} ${connected} ${new}"
 
 last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
 last=$(xrandr | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
