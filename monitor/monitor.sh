@@ -28,7 +28,7 @@ xrandr() {
 cmd=''
 
 nb_connected=$(xrandr | grep -c ' connected [0-9]')
-disconnected=$(xrandr | grep 'disconnected [0-9]' | cut -d ' ' -f 1)
+disconnected=$(xrandr | awk '/disconnected [0-9]/{print $1}')
 if [ "${nb_connected}" -eq 0 ]
 then
     # XXX keep always one screen to avoid killing the current session
@@ -41,7 +41,7 @@ do
     cmd="${cmd} --output ${output} --off"
 done
 
-new=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
+new=$(xrandr | awk '/ connected (/{print $1}')
 connected=$(xrandr | awk '/(+[0-9]{1,4}){2}/{print $1}')
 
 no_laptop='false'
