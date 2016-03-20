@@ -11,21 +11,27 @@ usage() {
   exit 1
 }
 
-if [ $# -ne 2 ]
+if [ $# -eq 0 ]
 then
+  src_name='eDP1'
+  dst_name=$(xrandr | awk '/ connected /{print $1}' | grep -v eDP1 | head -1)
+elif [ $# -ne 2 ]
+then
+  usage
+else
+  src_name=$1
+  dst_name=$2
+fi
+
+if [ $(echo "${available}" | grep -c "^${src_name}$") -ne 1 ]
+then
+  echo "${src_name} is not a valide screen"
   usage
 fi
 
-
-if [ $(echo "${available}" | grep -c "^${1}$") -ne 1 ]
+if [ $(echo "${available}" | grep -c "^${dst_name}$") -ne 1 ]
 then
-  echo "${1} is not a valide screen"
-  usage
-fi
-
-if [ $(echo "${available}" | grep -c "^${2}$") -ne 1 ]
-then
-  echo "${2} is not a valide screen"
+  echo "${dst_name} is not a valide screen"
   usage
 fi
 
@@ -51,12 +57,13 @@ bc() {
   echo $(echo "scale=4;${1}${2}${3}" | command bc)
 }
 
-src=$(get_preferred $1)
-dst=$(get_preferred $2)
+src=$(get_preferred $src_name)
+dst=$(get_preferred $dst_name)
 
 if [ "${src}" = "${dst}" ]
 then
-  command xrandr --output $1 --preferred --output $2 --preferred --same-as $1
+  command xrandr --output $src_name --preferred \
+                 --output $dst_name --preferred --same-as $src_name
 else
   declare $(echo "${src}" | awk -F 'x' '{print "x_src="$1"\ny_src="$2}')
   declare $(echo "${dst}" | awk -F 'x' '{print "x_dst="$1"\ny_dst="$2}')
@@ -68,7 +75,7 @@ else
   scale_y=$(bc "${y_src}" / "${y_dst}")
 
   command xrandr --fb "${src}" \
-          --output $1 --preferred --scale 1x1 \
-          --output $2 --preferred --pos "${pos}" \
-                      --scale "${scale_x}x${scale_y}"
+          --output $src_name --preferred --scale 1x1 \
+          --output $dst_name --preferred --pos "${pos}" \
+                             --scale "${scale_x}x${scale_y}"
 fi
