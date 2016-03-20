@@ -27,25 +27,18 @@ xrandr() {
 
 cmd=''
 
-nb_connected=$(xrandr | grep -c ' connected ')
-nb_disconnected=$(xrandr | grep -c 'disconnected [0-9]')
-nb_diff=$(($nb_connected - $nb_disconnected))
-
+nb_connected=$(xrandr | grep -c ' connected [0-9]')
 disconnected=$(xrandr | grep 'disconnected [0-9]' | cut -d ' ' -f 1)
+if [ "${nb_connected}" -eq 0 ]
+then
+    # XXX keep always one screen to avoid killing the current session
+    cmd="${cmd} --output eDP1 --preferred --scale 1x1"
+    disconnected="echo ${disconnected} | grep -v eDP1"
+fi
+
 for output in $disconnected
 do
-    # XXX keep always one screen to avoid killing the current session
-    if [ "${nb_diff}" -eq 1 -a "${nb_disconnected}" -gt 1 ]
-    then
-        cmd="${cmd} --output ${output} --off"
-    else
-        cmd="${cmd} --output eDP1 --preferred --scale 1x1"
-        cmd="${cmd} --output ${output} --off"
-
-        command xrandr $cmd
-        exit 0
-    fi
-    nb_disconnected=$(($nb_disconnected - 1))
+    cmd="${cmd} --output ${output} --off"
 done
 
 connected=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
