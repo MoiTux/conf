@@ -51,7 +51,7 @@ do
 done
 
 new=$(xrandr | awk '/ connected (/{print $1}')
-connected=$(xrandr | awk '/(+[0-9]{1,4}){2}/{print $1}')
+connected=$(xrandr | awk '/ connected [0-9]/{print $1}')
 
 last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
 last=$(xrandr | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
