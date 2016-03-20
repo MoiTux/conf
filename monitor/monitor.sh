@@ -49,7 +49,7 @@ if [ -n "$new" -o -n "$connected" ]
 then
     # XXX a new screen has been connected or clones has been detected
     #     so there is more that one screen no need to keep the laptop screen
-    state=$(cat /proc/acpi/button/lid/LID/state | tr -d ' ' | cut -d : -f 2)
+    state=$(awk '{print $2}' /proc/acpi/button/lid/LID/state)
     if [ "$state" = "closed" ]
     then
         cmd="${cmd} --output eDP1 --off"
