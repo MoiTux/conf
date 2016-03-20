@@ -41,12 +41,11 @@ do
     cmd="${cmd} --output ${output} --off"
 done
 
-connected=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
-
-clones=$(xrandr | awk '/(+[0-9]{1,4}){2}/{print $1}')
+new=$(xrandr | grep ' connected (' | cut -d ' ' -f 1)
+connected=$(xrandr | awk '/(+[0-9]{1,4}){2}/{print $1}')
 
 no_laptop='false'
-if [ -n "$connected" -o -n "$clones" ]
+if [ -n "$new" -o -n "$connected" ]
 then
     # XXX a new screen has been connected or clones has been detected
     #     so there is more that one screen no need to keep the laptop screen
@@ -67,7 +66,7 @@ else
 fi
 last=$(echo "$last" | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
 
-for output in $clones $connected
+for output in $connected $new
 do
     if [ "${no_laptop}" = 'true' -a "${output}" = 'eDP1' ]
     then
