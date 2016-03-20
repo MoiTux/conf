@@ -60,11 +60,11 @@ fi
 last=$(xrandr | grep ' connected [0-9]' | cut -d + -f 2 | sort -hr | head -1)
 if [ "${no_laptop}" = 'true' ]
 then
-    last=$(xrandr | grep -v eDP1)
+    xrandr_tmp=$(xrandr | grep -v eDP1)
 else
-    last=$(xrandr)
+    xrandr_tmp=$(xrandr)
 fi
-last=$(echo "$last" | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
+last=$(echo "$xrandr_tmp" | grep "+${last}+" | cut -d ' ' -f 1 | head -1)
 
 for output in $connected $new
 do
