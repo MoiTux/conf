@@ -50,7 +50,7 @@ do
     cmd="${cmd} --output ${output} --off"
 done
 
-new=$(xrandr | awk '/ connected (/{print $1}')
+new=$(xrandr | awk '/ connected \(/{print $1}')
 connected=$(xrandr | awk '/ connected [0-9]/{print $1}')
 
 order=$(echo "${new}" "${connected}" | grep eDP1)
