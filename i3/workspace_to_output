@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]
+then
+    exit 1
+fi
+
+ouputs=''
+next='\+0\+0'
+
+for _ in $(xrandr | awk '/ connected [0-9]/ {print $1}')
+do
+    tmp=$(xrandr | awk "/${next}/ {print \$1, \$3}")
+    outputs="${outputs}$(echo $tmp | cut -d ' ' -f 1) "
+    next=$(echo ${tmp} | cut -d ' ' -f 2 | cut -d 'x' -f 1)
+    next="\+${next}\+"
+done
+
+wk=$(i3-msg -t get_workspaces |
+     jq 'map(select(.focused)) | .[].name' |
+     tr -d \")
+output=$(echo ${outputs} | awk "{print \$${1}}")
+
+i3-msg "workspace ${wk}; move workspace to output ${output}; workspace ${wk}"
