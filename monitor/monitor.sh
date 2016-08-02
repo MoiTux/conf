@@ -32,16 +32,16 @@ state=$(awk '{print $2}' /proc/acpi/button/lid/LID/state)
 if [ "${state}" = "closed" ]
 then
     # the laptop's screen is closed remove it from available screen
-    _xrandr=$(echo "${_xrandr}" | grep -v eDP1)
+    _xrandr=$(echo "${_xrandr}" | grep -v eDP-1)
     nb_connected_all=$(xrandr | grep -c ' connected ')
     if [ "${nb_connected_all}" -ge 1 ]
     then
         # more than one screen is available force to disable laptop's screen
-        cmd="${cmd} --output eDP1 --off"
+        cmd="${cmd} --output eDP-1 --off"
     else
         # only the laptop's screen is available force it to avoid
         # killing the X session
-        cmd="${cmd} --output eDP1 --preferred --scale 1x1"
+        cmd="${cmd} --output eDP-1 --preferred --scale 1x1"
     fi
 fi
 
@@ -54,9 +54,9 @@ done
 new=$(xrandr | awk '/ connected \(/{print $1}')
 connected=$(xrandr | awk '/ connected [0-9]/{print $1}')
 
-order=$(echo "${new}\n${connected}" | grep eDP1)
-connected=$(echo "${connected}" | grep -v eDP1 | sort -r -)
-new=$(echo "${new}" | grep -v eDP1 | sort -r -)
+order=$(echo "${new}\n${connected}" | grep eDP-1)
+connected=$(echo "${connected}" | grep -v eDP-1 | sort -r -)
+new=$(echo "${new}" | grep -v eDP-1 | sort -r -)
 order="${order} ${connected} ${new}"
 
 for output in $order

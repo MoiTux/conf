@@ -24,14 +24,14 @@ if [ "$state" = "closed" ]; then
     # XXX keep always one screen to avoid killing the current session
     if [ "$(xrandr | grep \* | wc -l)" -gt 1 ];
     then
-       xrandr --output eDP1 --off
+       xrandr --output eDP-1 --off
     fi
 else
     regexp='connected [0-9]{1,4}x[0-9]{1,4}\+0\+0'
     first_screen=$(xrandr | grep -E "${regexp}" | cut -d ' ' -f 1)
     if [ -z "${first_screen}" ]; then
-        xrandr --output eDP1 --preferred
+        xrandr --output eDP-1 --preferred
     else
-        xrandr --output eDP1 --preferred --left-of "${first_screen}"
+        xrandr --output eDP-1 --preferred --left-of "${first_screen}"
     fi
 fi
