@@ -13,8 +13,8 @@ usage() {
 
 if [ $# -eq 0 ]
 then
-  src_name='eDP1'
-  dst_name=$(xrandr | awk '/ connected /{print $1}' | grep -v eDP1 | head -1)
+  src_name='eDP-1'
+  dst_name=$(xrandr | awk '/ connected /{print $1}' | grep -v eDP-1 | head -1)
 elif [ $# -ne 2 ]
 then
   usage
@@ -68,7 +68,7 @@ else
   declare $(echo "${src}" | awk -F 'x' '{print "x_src="$1"\ny_src="$2}')
   declare $(echo "${dst}" | awk -F 'x' '{print "x_dst="$1"\ny_dst="$2}')
 
-  pos=$(xrandr | awk '/eDP1/ {print substr($3, index($3, "+") + 1) }')
+  pos=$(xrandr | awk '/eDP-1/ {print substr($3, index($3, "+") + 1) }')
   pos=$(echo "${pos}" | sed 's/+/x/')
 
   scale_x=$(bc "${x_src}" / "${x_dst}")
