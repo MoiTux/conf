@@ -68,7 +68,14 @@ else
   declare $(echo "${src}" | awk -F 'x' '{print "x_src="$1"\ny_src="$2}')
   declare $(echo "${dst}" | awk -F 'x' '{print "x_dst="$1"\ny_dst="$2}')
 
-  pos=$(xrandr | awk "/${src_name}/ "'{print substr($3, index($3, "+") + 1) }')
+  pos=$(xrandr | awk "/${src_name}/ "'{
+    i=1;
+    while (i <= NF) {
+      if ( match($i, /\+/) )
+         print substr($i, index($i, "+"));
+      i++
+    }
+  }')
   pos=$(echo "${pos}" | sed 's/+/x/')
 
   scale_x=$(bc "${x_src}" / "${x_dst}")
