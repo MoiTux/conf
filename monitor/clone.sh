@@ -43,12 +43,24 @@ xrandr() {
 
 get_preferred() {
   # get the preferred mode of a screen
-  echo $(xrandr | awk "/^$1 / {
-           do
-             getline;
-           while (match(\$0, /[0-9]{2}\.[0-9]{2}( |\*)\+/) == 0)
-           print \$1
-         }")
+  res=$(xrandr | awk "/^$1 / "'{
+    do {
+      getline;
+      if ( match($0, /[0-9]{2}\.[0-9]{2}( |\*)\+/) != 0) {
+        print $1;
+        break;
+      }
+    } while (match($0, /^ /))
+  }')
+  if [ -z "${res}" ]
+  then
+    # no preferred found fallback to the first available mode
+    res=$(xrandr | awk "/^$1 / "'{
+      getline;
+      print $1
+    }')
+  fi
+  echo $res
 }
 
 bc() {
