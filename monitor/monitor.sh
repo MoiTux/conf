@@ -52,7 +52,7 @@ do
 done
 
 new=$(xrandr | awk '/ connected \(/{print $1}')
-connected=$(xrandr | awk '/ connected [0-9]/{print $1}')
+connected=$(xrandr | awk '/ connected (primary )?[0-9]/{print $1}')
 
 order=$(echo "${new}\n${connected}" | grep eDP-1)
 connected=$(echo "${connected}" | grep -v eDP-1 | sort -r -)
