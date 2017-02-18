@@ -3,6 +3,12 @@
 # the same output mode
 # this script will add the --scale option to fix this issue
 
+# XXX override xrandr command to only call it once
+_xrandr=$(xrandr)
+xrandr() {
+    echo "$_xrandr"
+}
+
 available=$(xrandr | awk '/ connected /{print $1}')
 
 usage() {
@@ -34,12 +40,6 @@ then
   echo "${dst_name} is not a valide screen"
   usage
 fi
-
-# XXX override xrandr command to only call it once
-_xrandr=$(xrandr)
-xrandr() {
-    echo "$_xrandr"
-}
 
 get_preferred() {
   # get the preferred mode of a screen
