@@ -12,7 +12,7 @@ xrandr() {
 available=$(xrandr | awk '/ connected /{print $1}')
 
 usage() {
-  echo 'Usage: clone screen_src screen_dst'
+  echo 'Usage: clone [screen_src screen_dst]'
   echo -e "Available screen:\n${available}"
   exit 1
 }
