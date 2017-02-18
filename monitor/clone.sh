@@ -72,7 +72,7 @@ else
     i=1;
     while (i <= NF) {
       if ( match($i, /\+/) )
-         print substr($i, index($i, "+"));
+         print substr($i, index($i, "+") + 1);
       i++
     }
   }')
