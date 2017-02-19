@@ -63,38 +63,8 @@ get_preferred() {
   echo $res
 }
 
-bc() {
-  # to simply the way to use bc:
-  # e.g : bc 3 / 4 # output .75
-  echo $(echo "scale=4;${1}${2}${3}" | command bc)
-}
-
 src=$(get_preferred $src_name)
-dst=$(get_preferred $dst_name)
 
-if [ "${src}" = "${dst}" ]
-then
-  command xrandr --output $src_name --preferred \
-                 --output $dst_name --preferred --same-as $src_name
-else
-  declare $(echo "${src}" | awk -F 'x' '{print "x_src="$1"\ny_src="$2}')
-  declare $(echo "${dst}" | awk -F 'x' '{print "x_dst="$1"\ny_dst="$2}')
-
-  pos=$(xrandr | awk "/${src_name}/ "'{
-    i=1;
-    while (i <= NF) {
-      if ( match($i, /\+/) )
-         print substr($i, index($i, "+") + 1);
-      i++
-    }
-  }')
-  pos=$(echo "${pos}" | sed 's/+/x/')
-
-  scale_x=$(bc "${x_src}" / "${x_dst}")
-  scale_y=$(bc "${y_src}" / "${y_dst}")
-
-  command xrandr --fb "${src}" \
-          --output $src_name --preferred --scale 1x1 \
-          --output $dst_name --preferred --pos "${pos}" \
-                             --scale "${scale_x}x${scale_y}"
-fi
+command xrandr --fb "${src}" \
+        --output $src_name --preferred --scale 1x1 \
+        --output $dst_name --same-as $src_name --preferred --scale-from "${src}"
