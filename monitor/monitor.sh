@@ -20,7 +20,6 @@ else
 fi
 
 # XXX override xrandr command to only call it once
-sleep 1
 _xrandr=$(xrandr -q)
 xrandr() {
     echo "$_xrandr"
