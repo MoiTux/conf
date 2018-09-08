@@ -10,7 +10,11 @@ next='\+0\+0'
 
 for _ in $(xrandr | grep -P '(?<!dis)connected' | cut -d ' ' -f 1)
 do
-    tmp=$(xrandr | awk "/${next}/ {print \$1, \$3}")
+    tmp=$(xrandr | awk '/'${next}'/ {
+            for (i=1;i<=NF;i++)
+              if ($i ~ /'${next}'/)
+                print $1, $i
+            }')
     outputs="${outputs}$(echo $tmp | cut -d ' ' -f 1) "
     next=$(echo ${tmp} | cut -d ' ' -f 2 | cut -d 'x' -f 1)
     next="\+${next}\+"
