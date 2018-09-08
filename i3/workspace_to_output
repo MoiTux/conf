@@ -16,8 +16,10 @@ do
                 print $1, $i
             }')
     outputs="${outputs}$(echo $tmp | cut -d ' ' -f 1) "
-    next=$(echo ${tmp} | cut -d ' ' -f 2 | cut -d 'x' -f 1)
-    next="\+${next}\+"
+
+    length=$(echo ${tmp} | awk '{print $2}' | cut -d x -f 1)
+    current=$(echo ${tmp} | awk '{print $2}' | cut -d + -f 2)
+    next="\+$(( ${length} + ${current} ))\+0"
 done
 
 wk=$(i3-msg -t get_workspaces |
