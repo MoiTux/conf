@@ -8,13 +8,18 @@ fi
 ouputs=''
 next='\+0\+0'
 
-for _ in $(xrandr | grep -P '(?<!dis)connected' | cut -d ' ' -f 1)
+while true
 do
     tmp=$(xrandr | awk '/'${next}'/ {
             for (i=1;i<=NF;i++)
               if ($i ~ /'${next}'/)
                 print $1, $i
             }')
+    if [ -z "${tmp}" ]
+    then
+      break
+    fi
+
     outputs="${outputs}$(echo $tmp | cut -d ' ' -f 1) "
 
     length=$(echo ${tmp} | awk '{print $2}' | cut -d x -f 1)
